@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -53,3 +54,43 @@ body {
   margin: 0;
 }
 
+/* Reset default appearance */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #c4b5fd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+
+/* Checked state */
+input[type="checkbox"]:checked {
+  background-color: #8b5cf6;
+  /* violet-500 */
+  border-color: #8b5cf6;
+  color: #ffff;
+}
+
+/* Disabled */
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes animatePop {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pop {
+  animation: animatePop 0.3s ease-in-out;
+}
