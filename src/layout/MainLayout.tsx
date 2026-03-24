@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Sidebar from '../components/layoutUI/SideBar';
 import Navbar from '../components/layoutUI/NavBar';
+import Toast from '../components/UI/Toast';
 
 interface MainLayout {
     children: React.ReactNode
@@ -19,6 +20,7 @@ const MainLayout = ({ children }: MainLayout) => {
                     {children}
                 </div>
             </div>
+             <Toast />
         </div>
     )
 }

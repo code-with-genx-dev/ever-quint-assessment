@@ -1,5 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import TaskCard from "./TaskCard";
+import { CiNoWaitingSign } from "react-icons/ci";
+
 
 const Column = ({ title, tasks }: any) => {
     const { setNodeRef } = useDroppable({
@@ -24,15 +26,21 @@ const Column = ({ title, tasks }: any) => {
     }
     return (
         <div ref={setNodeRef} className={`p-3 rounded-lg min-h-100 ${bgStatusMap[title]}`}>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-3">
                 <p className={`font-semibold text-[16px]  ${titleStatusMap[title]}`}>{title}</p>
                 <p className={`text-[12px] px-2 rounded-md inline-flex ${taskCountMap[title]}`}>{tasks.length}</p>
             </div>
 
             <div className="space-y-2">
-                {tasks.map((task: any) => (
-                    <TaskCard key={task.id} task={task} />
-                ))}
+                {tasks.length === 0 ? (
+                    <div className="text-center  text-[12px] text-gray-500 py-4 border border-dashed rounded-md">
+                       <p className="flex items-center gap-2 justify-center"> <CiNoWaitingSign color="#222" /> No tasks yet</p>
+                    </div>
+                ) : (
+                    tasks.map((task: any) => (
+                        <TaskCard key={task.id} task={task} />
+                    ))
+                )}
             </div>
         </div>
     );

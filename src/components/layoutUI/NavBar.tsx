@@ -7,15 +7,15 @@ import { useTaskStore } from '../../store/useTaskStore';
 
 const Navbar = () => {
     const location = useLocation();
-    const { reset } = useTaskStore();
+    const { setIsPopupOpen} = useTaskStore();
     const pageTitle = location.pathname.replace("/", "").toUpperCase() || "HOME";
 
     return (
         <nav className="h-14 bg-white shadow flex items-center justify-between px-6">
             <TimeIndicator pageTitle={pageTitle} />
             <div className="flex items-center gap-4">
-                <Avatar src='https://i.pravatar.cc/40?img=4' size='md' alt={'User'} />
-                <Button name='Reset' onClick={() => reset()} />
+                <Avatar src='https://i.pravatar.cc/40?img=33' size='md' alt={'User'} />
+                <Button name='Reset' onClick={() => setIsPopupOpen(true)} />
             </div>
         </nav>
     );

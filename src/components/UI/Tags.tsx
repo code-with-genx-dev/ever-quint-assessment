@@ -19,7 +19,6 @@ const colors = [
 ];
 
 const Tags: React.FC<TagsProps> = ({ items }) => {
-    console.log(items)
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((tag:any, index:any) => {

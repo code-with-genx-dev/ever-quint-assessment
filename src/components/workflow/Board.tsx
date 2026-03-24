@@ -9,11 +9,9 @@ const Board = () => {
   const columns = ["Backlog", "In Progress", "Done"];
 
   const filteredTasks = tasks.filter((task) => {
-    const matchesSearch =
-      task.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase());
 
-    const matchesFilter =
-      filters.length === 0 || filters.includes(task.status);
+    const matchesFilter = filters.length === 0 || filters.includes(task.status);
 
     return matchesSearch && matchesFilter;
   });

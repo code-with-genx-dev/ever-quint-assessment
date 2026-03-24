@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 import Button from "../UI/Button";
 import { taskSchema } from "../../schema/zodFormValidation";
 import { useTaskStore, type PriorityType, type StatusType } from "../../store/useTaskStore";
 import Sidebar from "../UI/Sidebar";
 import { IoMdClose } from "react-icons/io";
+import { useToastStore } from "../../store/useToastStore";
 
-const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
+const AddTaskModal = () => {
     const [form, setForm] = useState({
         title: "",
         description: "",
@@ -16,7 +17,8 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
         tags: "",
     });
     const [errors, setErrors] = useState<any>();
-    const { addTask } = useTaskStore();
+    const { addTask, setTaskModalOpen, taskModalOpen, editTask, updateTask, setEditTask } = useTaskStore();
+    const { showToast } = useToastStore();
 
     const handleChange = (key: string, value: any) => {
         setForm((prev) => ({ ...prev, [key]: value }));
@@ -48,33 +50,59 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
         }
         const finalData = {
             ...form,
-            id: Date.now(),
+            id: editTask ? editTask.id : Date.now(),
             tags: form.tags.split(","),
-            createdAt: new Date(),
+            createdAt: editTask ? editTask.createdAt : new Date(),
             updatedAt: new Date(),
         };
 
-        addTask(finalData);
+        if (editTask) {
+            updateTask(finalData);
+            showToast("Task updated successfully");
+        } else {
+            addTask(finalData);
+            showToast("Task added successfully");
+        }
+        setEditTask(null);
         setTaskModalOpen(false);
-        setErrors(null);
-        reset()
+        reset();
     };
 
+    console.log(editTask, "Edit Task")
+
+    useEffect(() => {
+        if (editTask) {
+            setForm({
+                title: editTask.title || "",
+                description: editTask.description || "",
+                status: editTask.status,
+                priority: editTask.priority,
+                assignee: editTask.assignee || "",
+                tags: editTask.tags.join(", "),
+            });
+        }
+    }, [editTask]);
+
+    useEffect(() => {
+        if (!taskModalOpen) {
+            reset();
+        }
+    }, [taskModalOpen]);
+
     return (
-        <Sidebar onHide={() => (setTaskModalOpen(false), reset())} visible={taskModalOpen} customHeader={true}
+        <Sidebar onHide={() => (setTaskModalOpen(false), reset(), setEditTask(null))} visible={taskModalOpen} customHeader={true}
             header={
-                <div className="shrink-0 flex justify-between items-center px-4 py-3 border-b text-white bg-violet-600">
-                    <h3 className="font-semibold text-[15px]">Add Task</h3>
-                    <button onClick={() => { setTaskModalOpen(false), setErrors(null), reset() }} className="cursor-pointer p-1 rounded hover:bg-violet-700 transition-colors">
+                <div role="heading" aria-level={2} className="shrink-0 flex justify-between items-center px-4 py-3 border-b text-white bg-violet-600">
+                    <h3 className="font-semibold text-[15px]">{editTask ? "Edit Task" : "Add Task"}</h3>
+                    <button aria-label="Close modal" onClick={() => { setTaskModalOpen(false), setErrors(null), reset(), setEditTask(null) }} className="cursor-pointer p-1 rounded hover:bg-violet-700 transition-colors">
                         <IoMdClose size={18} />
                     </button>
                 </div>
             }>
             <div className="bg-white rounded-lg w-full animate-pop space-y-1">
-                <h2 className="text-[16px] font-semibold text-[#222]">Add Task</h2>
-                {/* Title */}
-                <div>
-                    <label htmlFor="" className="text-[14px] text-[#222]">Title <span className="text-[10px] text-red-500">*</span></label>
+
+                <div role="dialog" aria-modal="true" aria-labelledby="add-task-title">
+                    <label htmlFor="title" className="text-[14px] text-[#222]">Title <span className="text-[10px] text-red-500">*</span></label>
                     <input
                         type="text"
                         placeholder="Title"
@@ -89,7 +117,7 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
 
                 {/* Description */}
                 <div>
-                    <label htmlFor="" className="text-[14px] text-[#222]">Description</label>
+                    <label htmlFor="description" className="text-[14px] text-[#222]">Description</label>
                     <textarea
                         style={{ resize: "none" }}
                         placeholder="Description"
@@ -101,7 +129,7 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
 
                 {/* Status */}
                 <div>
-                    <label htmlFor="" className="text-[14px] text-[#222]">Status <span className="text-[10px] text-red-500">*</span></label>
+                    <label htmlFor="status" className="text-[14px] text-[#222]">Status <span className="text-[10px] text-red-500">*</span></label>
                     <Dropdown
                         options={["Backlog", "In Progress", "Done"]}
                         value={form.status}
@@ -114,7 +142,7 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
 
                 {/* Priority */}
                 <div>
-                    <label htmlFor="" className="text-[14px] text-[#222]">Priority <span className="text-[10px] text-red-500">*</span></label>
+                    <label htmlFor="priority" className="text-[14px] text-[#222]">Priority <span className="text-[10px] text-red-500">*</span></label>
                     <Dropdown
                         options={["Low", "Medium", "High"]}
                         value={form.priority}
@@ -127,7 +155,7 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
 
                 {/* Assignee */}
                 <div>
-                    <label htmlFor="" className="text-[14px] text-[#222]">Assignee <span className="text-[10px] text-red-500">*</span></label>
+                    <label htmlFor="assignee" className="text-[14px] text-[#222]">Assignee <span className="text-[10px] text-red-500">*</span></label>
                     <input
                         type="text"
                         placeholder="Assignee"
@@ -142,7 +170,7 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
 
                 {/* Tags */}
                 <div>
-                    <label htmlFor="" className="text-[14px] text-[#222]">Tags <span className="text-[10px] text-red-500">*</span></label>
+                    <label htmlFor="tags" className="text-[14px] text-[#222]">Tags <span className="text-[10px] text-red-500">*</span></label>
                     <input
                         type="text"
                         placeholder="Tags (comma separated)"
@@ -157,8 +185,8 @@ const AddTaskModal = ({ setTaskModalOpen, taskModalOpen }: any) => {
 
                 {/* Buttons */}
                 <div className="flex justify-center gap-2 pt-2">
-                    <Button name="Cancel" variant="secondary" onClick={() => { setTaskModalOpen(false), setErrors(null), reset() }} />
-                    <Button name="Add Task" variant="primary" onClick={handleSubmit} />
+                    <Button name="Cancel" variant="secondary" onClick={() => { setTaskModalOpen(false), setErrors(null), reset(), setEditTask(null) }} />
+                    <Button name={editTask ? "Update Task" : "Add Task"} variant="primary" onClick={handleSubmit} />
                 </div>
 
             </div>

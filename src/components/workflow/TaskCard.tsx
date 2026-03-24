@@ -10,7 +10,7 @@ const TaskCard = ({ task }: any) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: task.id,
     });
-    const { setSelectedTask } = useTaskStore();
+    const { setSelectedTask, setEditTask, setTaskModalOpen } = useTaskStore();
 
     const style = {
         transform: transform
@@ -38,7 +38,7 @@ const TaskCard = ({ task }: any) => {
                     <RxDragHandleHorizontal size={22} />
                 </div>
             </div>
-            <div className="flex flex-col gap-1 text-[14px]">
+            <div className="flex flex-col gap-1.5 text-[14px]">
                 <div className="leading-5">
                     <p className="font-semibold text-[#222]">{task.title}</p>
                     <p title={task.description} className="text-[12px] text-[#222] truncate">{task.description}</p>
@@ -47,7 +47,7 @@ const TaskCard = ({ task }: any) => {
                     <div className="flex items-center gap-2 text-[#222]">
                         <span className="text-[#222] font-semibold">Assignee: </span>
                         <div className="flex items-center gap-1">
-                            <div className="w-5.5 h-5.5 rounded-full bg-violet-500 text-white flex items-center justify-center text-[12px]">
+                            <div className="w-5 h-5 rounded-full bg-violet-500 text-white flex items-center justify-center text-[10px]">
                                 {initials}
                             </div>
                             {task.assignee}
@@ -55,11 +55,14 @@ const TaskCard = ({ task }: any) => {
                     </div>
                 </div>
                 <div>
-                    <Tags items={task.tags}/>
+                    <Tags items={task.tags} />
                 </div>
                 <div className="flex justify-between items-center">
                     <p className="text-gray-500 text-[12px]">{moment(task.createdAt).format("DD/MM/YYYY")}</p>
-                    <button  onClick={() => setSelectedTask(task)} className="border text-[13px] rounded-md cursor-pointer text-[#222] hover:bg-violet-400 hover:text-white border-violet-500 px-3">View</button>
+                    <div className="flex items-center gap-1">
+                        <button onClick={() => setSelectedTask(task)} className=" text-[13px] rounded-md cursor-pointer text-[#222] bg-gray-300 px-3">View</button>
+                        <button onClick={() => { setEditTask(task), setTaskModalOpen(true); }} className="text-[13px] rounded-md cursor-pointer  bg-violet-600 text-white px-3">Edit</button>
+                    </div>
                 </div>
             </div>
         </div>
