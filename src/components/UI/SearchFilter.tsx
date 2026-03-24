@@ -18,14 +18,14 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
     };
 
     return (
-        <div className="flex items-center border rounded-md outline-none text-[14px] border-violet-400">
-            <IoSearch className="text-violet-500 pl-1 text-xl"/>
+        <div className="flex items-center border rounded-md outline-none text-[14px] bg-white border-violet-500">
+            <IoSearch className="text-violet-700 pl-1 text-xl"/>
             <input
                 type="text"
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
                 placeholder={placeholder}
-                className="px-3 py-1 outline-none"
+                className="px-3 py-1 outline-none text-black"
             />
         </div>
     );

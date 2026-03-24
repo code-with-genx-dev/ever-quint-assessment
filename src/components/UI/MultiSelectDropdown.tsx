@@ -47,24 +47,24 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
 
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className="border px-3 py-1 rounded-md cursor-pointer border-violet-400 text-[14px]"
+                className="border px-3 py-1 rounded-md cursor-pointer border-violet-500 text-[14px] bg-white"
             >
                 {displayText}
             </div>
 
             {/* Dropdown */}
             {isOpen && (
-                <div className="absolute mt-1 w-full border rounded-md shadow-md z-10 max-h-60 overflow-auto">
+                <div className="absolute mt-1 w-full border rounded-md shadow-md z-10 max-h-60 overflow-auto bg-white border-violet-500">
                     {options.map((option) => (
                         <label
                             key={option}
-                            className="flex items-center gap-2 px-3 py-2 cursor-pointer text-[14px] text-[#222] hover:bg-violet-300! hover:text-white"
+                            className="flex items-center gap-2 px-3 py-2 cursor-pointer text-[14px] text-[#222] hover:bg-violet-400! hover:text-white"
                         >
                             <input
                                 type="checkbox"
                                 checked={selected.includes(option)}
                                 onChange={() => toggleOption(option)}
-                                className="accent-violet-500 w-4 h-4"
+                                className="accent-violet-700 w-4 h-4"
                             />
                             {option}
                         </label>

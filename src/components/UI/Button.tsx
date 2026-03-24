@@ -12,9 +12,9 @@ const Button = (props: buttonProps) => {
     const { name, customClass, loading, onClick, variant = "primary", disabled } = props;
 
     const variantMap: any = {
-        primary: 'bg-violet-500! text-white!',
-        secondary: 'bg-yellow-500! text-white!',
-        danger: 'bg-red-500! text-white! ',
+        primary: 'bg-violet-700! text-white!',
+        secondary: 'bg-yellow-700! text-white!',
+        danger: 'bg-red-700! text-white! ',
     }
 
     return (

@@ -94,3 +94,12 @@ input[type="checkbox"]:disabled {
 .animate-pop {
   animation: animatePop 0.3s ease-in-out;
 }
+
+* {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}

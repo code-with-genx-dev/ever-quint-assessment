@@ -25,13 +25,13 @@ const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
         <div className="relative" ref={ref}>
             <div
                 onClick={() => setOpen(!open)}
-                className="border border-violet-400 px-2 py-1 text-[14px] rounded-md cursor-pointer"
+                className="border border-violet-500 px-2 py-1 text-[14px] rounded-md text-[#222] cursor-pointer"
             >
                 {value || "Select"}
             </div>
 
             {open && (
-                <div className="absolute w-full bg-white border border-violet-400 mt-1 rounded-md z-10">
+                <div className="absolute w-full bg-white border border-violet-500 mt-1 rounded-md z-10">
                     {options.map((opt) => (
                         <div
                             key={opt}
@@ -39,7 +39,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
                                 onChange(opt);
                                 setOpen(false);
                             }}
-                            className="px-2 py-1 hover:bg-violet-300 hover:text-white text-[#222] cursor-pointer text-[14px]"
+                            className="px-2 py-1 hover:bg-violet-400 hover:text-white text-[#222] cursor-pointer text-[14px]"
                         >
                             {opt}
                         </div>
