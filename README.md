@@ -1,241 +1,94 @@
-# React + TypeScript + Vite
+# Workflow Task Board (Kanban App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# 🧩 Workflow Task Board (Kanban App)
-
-A simple and interactive task management board built using **React**, **Zustand**, and **dnd-kit**.  
-Users can create, edit, drag-and-drop, and filter tasks across different stages.
+An interactive task management board built with **React**, **Zustand**, and **dnd-kit**. Create, edit, drag-and-drop, and filter tasks across different stages.
 
 ---
 
-## 🚀 How to Run the Project
+## Getting Started
 
-### 1. Clone the repo
 ```bash
+# Clone the repo
 git clone <your-repo-url>
 cd <project-folder>
-```
 
-### 2. Install dependencies
-```bash
+# Install dependencies
 npm install
-```
 
-### 3. Run the app
-```bash
+# Run the app
 npm run dev
 ```
 
-### 4. Open in browser
-```
-http://localhost:5173
-```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 🏗️ Architecture Overview
+## Tech Stack
 
-### 📁 Folder Structure
+- **React** + **TypeScript** + **Vite**
+- **Zustand** — global state management with `persist` (localStorage)
+- **dnd-kit** — drag-and-drop functionality
+- **Zod** — form validation
+
+---
+
+## Folder Structure
 
 ```
 src/
-│
 ├── components/
-│   ├── UI/              → Reusable UI components (Button, Sidebar, Tags)
-│   ├── form/            → Forms (Add/Edit Task Modal)
-│   └── workflow/        → Board, Column, TaskCard
-│
+│   ├── UI/          # Reusable UI components (Button, Sidebar, Tags)
+│   ├── form/        # Add/Edit Task Modal
+│   └── workflow/    # Board, Column, TaskCard
 ├── store/
-│   └── useTaskStore.ts  → Zustand global state
-│
+│   └── useTaskStore.ts   # Zustand global state
 ├── pages/
-│   └── Home.tsx         → Main screen
-│
+│   └── Home.tsx          # Main screen
 └── schema/
-    └── zodValidation    → Form validation
+    └── zodValidation      # Form validation schemas
 ```
 
 ---
 
-## ⚙️ Key Design Decisions
-
-### 🧠 State Management → Zustand
-
-- Chosen for simplicity and minimal boilerplate
-- Avoids prop drilling across deeply nested components
-- Handles: tasks data, edit state, modal visibility, filters & search
-
-### 🧩 Component Design
-
-| Component | Responsibility |
-|-----------|---------------|
-| `TaskCard` | Small, reusable, focused UI |
-| `Column` | Responsible only for grouping tasks |
-| `Board` | Handles drag-and-drop logic |
-| `Modal (Add/Edit)` | Single component reused for both create & edit |
-
-This keeps components **reusable**, **easy to test**, and **easy to maintain**.
-
-### 🔄 Data Layer
-
-- Stored using Zustand with `persist`
-- localStorage used for persistence
-- Each task includes:
-  - Metadata (`createdAt`, `updatedAt`)
-  - History tracking (drag movement)
-
----
-
-## 🧩 Component Hierarchy
+## Component Hierarchy
 
 ```
 Home
- ├── Header (Search + Filter + Add Button)
- ├── Board
- │    ├── Column (Backlog)
- │    │     └── TaskCard
- │    ├── Column (In Progress)
- │    │     └── TaskCard
- │    └── Column (Done)
- │          └── TaskCard
- │
- ├── AddTaskModal (Create/Edit)
- └── TaskViewModal (Details)
+├── Header (Search + Filter + Add Button)
+├── Board
+│   ├── Column (Backlog)     → TaskCard
+│   ├── Column (In Progress) → TaskCard
+│   └── Column (Done)        → TaskCard
+├── AddTaskModal (Create / Edit)
+└── TaskViewModal (Task Details)
 ```
 
 ---
 
-## 💾 Storage Versioning / Migration
+## State Management
 
-Currently using Zustand `persist` with localStorage. No versioning implemented yet.
+Zustand is used for all global state:
 
-**Future improvement:**
+- Task data (create, update, delete)
+- Modal visibility and edit state
+- Search and filter state
+- Drag movement history per task
 
-```ts
-persist(
-  (set) => ({ ... }),
-  {
-    name: "task-storage",
-    version: 1,
-    migrate: (state, version) => {
-      if (version === 0) {
-        return {
-          ...state,
-          tasks: state.tasks.map(t => ({
-            ...t,
-            priority: t.priority || "Low"
-          }))
-        };
-      }
-      return state;
-    }
-  }
-)
-```
-
+Tasks are persisted to **localStorage** via Zustand's `persist` middleware. Each task includes `createdAt`, `updatedAt`, and movement history.
 
 ---
 
+## Known Limitations
 
-## ⚠️ Known Limitations
-
-| Limitation | Detail |
-|------------|--------|
-| No backend | Data stored only in localStorage |
-| No real-time sync | Multi-user not supported |
-| Basic validation | Can be extended with Zod |
-| Drag-and-drop | Not optimized for very large datasets |
-| No pagination | No virtualization implemented |
+- No backend — data is stored only in localStorage
+- No real-time sync or multi-user support
+- No pagination or virtualization for large datasets
 
 ---
 
+## Planned Improvements
 
-
-## ✨ Future Improvements
-
-- [ ] Backend integration (Node / NestJS)
-- [ ] Real-time updates (WebSockets)
+- [ ] Backend integration (Node.js / NestJS)
+- [ ] Real-time updates via WebSockets
 - [ ] Role-based access control
-- [ ] Drag animation polish
 - [ ] Mobile responsiveness improvements
-
----
-
-## 💡 Summary
-
-This project focuses on:
-
-- ✅ Clean component architecture
-- ✅ Efficient state management with Zustand
-- ✅ Good UX practices
-- ✅ Scalable design patterns
+- [ ] Storage versioning and migration support
